@@ -14,5 +14,14 @@
 | wechat_name | varchar  |      |        | 微信号名称                 |
 | room        | varchar  |      |        | 消息群名，如果为空则为私聊 |
 | timestamp   | int      |      |        | 消息时间戳                 |
-| message     | varchar  |      |        | 消息内容                   |
+| message     | text     |      |        | 消息内容                   |
 
+```sql
+CREATE TABLE public.message (
+	wechat_id varchar NULL,
+	wechat_name varchar NULL,
+	room varchar NULL,
+	"timestamp" int NULL,
+	message text NULL
+);
+```
