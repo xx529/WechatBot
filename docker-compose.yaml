@@ -11,18 +11,21 @@ services:
     ports:
       - "180:8080"
       
-  wechatbot:
+  bot:
     build:
-      context: ./wechatbot
+      context: ./bot
       dockerfile: Dockerfile
       network: host
-    image: "wechatbot:1.0"
-    container_name: "wechatbot-wechatbot"
+    image: "bot:1.0"
+    container_name: "wechatbot-bot"
     restart: always
     env_file:
-      - envfile/wechatbot.env
+      - envfile/bot.env
     volumes:
-      - "/home/liangzhixing/WechatBot/wechatbot:/wechatbot"
+      - "/home/liangzhixing/WechatBot/bot:/bot"
+    command: python3 /bot/bot.py
+    depends_on:
+      - gateway
 
   dashboard:
     build:

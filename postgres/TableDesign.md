@@ -12,7 +12,7 @@
 | ----------- | -------- | ---- | ------ | -------------------------- |
 | wechat_id   | varchar  |      |        | 微信号ID                   |
 | wechat_name | varchar  |      |        | 微信号名称                 |
-| room        | varchar  |      |        | 消息群名，如果为空则为私聊 |
+| room_id     | varchar  |      |        | 消息群名ID，如果为空则为私聊 |
 | timestamp   | int      |      |        | 消息时间戳                 |
 | message     | text     |      |        | 消息内容                   |
 
