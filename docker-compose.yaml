@@ -27,6 +27,23 @@ services:
     depends_on:
       - gateway
 
+  message:
+    build:
+      context: ./message
+      dockerfile: Dockerfile
+      network: host
+    image: "message:1.0"
+    container_name: "wechatbot-message"
+    restart: always
+    env_file:
+      - envfile/message.env
+    ports:
+      - "100:5000"
+    volumes:
+      - "/home/liangzhixing/WechatBot/message:/message"
+    command: python3 /message/app/start.py
+
+
   dashboard:
     build:
       context: ./dashboard
@@ -43,6 +60,8 @@ services:
     volumes:
       - "/home/liangzhixing/WechatBot/dashboard/app:/app"
     command: tail -f /dev/null
+    depends_on:
+      - postgres-db
 
   postgres-db:
     image: "postgres:11-bullseye"

@@ -35,15 +35,6 @@ class MyBot(Wechaty):
             conversation = from_contact if room is None else room
             await conversation.ready()
             await conversation.say('# 这是自动回复：dong')
-    #
-    # async def on_login(self, contact: Contact):
-    #     print(f'user: {contact} has login')
-    #
-    # async def on_scan(self, status: ScanStatus, qr_code: Optional[str] = None,
-    #                   data: Optional[str] = None):
-    #     contact = self.Contact.load(self.contact_id)
-    #     print(f'user <{contact}> scan status: {status.name} , '
-    #           f'qr_code: {qr_code}')
 
 
 bot: Optional[MyBot] = None

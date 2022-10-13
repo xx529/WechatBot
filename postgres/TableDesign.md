@@ -20,7 +20,7 @@
 CREATE TABLE public.message (
 	wechat_id varchar NULL,
 	wechat_name varchar NULL,
-	room varchar NULL,
+	room_id varchar NULL,
 	"timestamp" int NULL,
 	message text NULL
 );

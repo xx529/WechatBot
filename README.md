@@ -21,14 +21,25 @@
    ```
 
 
-3. `wechatbot.env`
+3. `bot.env`
 
    ```.env
    WECHATY_PUPPET_SERVICE_TOKEN=官网申请的token
    WECHATY_PUPPET_SERVICE_ENDPOINT=gateway的ip和端口
+   MESSAGE_SERVICE_ENDPOINT=消息服务的ip和端口
    ```
 
 4. `dashboard.env`
+
+   ```.env
+   PG_HOST=数据库ip
+   PG_PORT=数据库端口
+   PG_DB=数据库名
+   PG_USER=用户名称
+   PG_PASSWORD=数据库密码
+   ```
+   
+5. `message.env`
 
    ```.env
    PG_HOST=数据库ip
