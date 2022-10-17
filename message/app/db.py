@@ -11,7 +11,7 @@ conn_info = {'dbname': os.environ.get('PG_DB'),
              'port': os.environ.get('PG_PORT')}
 
 
-def auto_upload(func):
+def auto_exec(func):
     def inner(*args, **kwargs):
         with psycopg2.connect(**conn_info) as conn:
             sql = func(*args, **kwargs)
@@ -20,7 +20,7 @@ def auto_upload(func):
     return inner
 
 
-@auto_upload
+@auto_exec
 def add_message(data):
     logging.info(
         f"{data['wechat_id']} - {data['wechat_name']} - {data['room_id']} - {data['timestamp']} - {data['message'][:15]}...")

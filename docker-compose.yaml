@@ -23,7 +23,8 @@ services:
       - envfile/bot.env
     volumes:
       - "/home/liangzhixing/WechatBot/bot:/bot"
-    command: python3 /bot/bot.py
+#    command: python3 /bot/bot.py
+    command: tail -f /dev/null
     depends_on:
       - gateway
 
