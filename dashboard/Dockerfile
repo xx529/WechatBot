@@ -6,7 +6,8 @@ RUN apt update -y && \
 
 RUN apt-get install -y openssh-server openssh-client && \
     echo root:lsx?lzx-mq-wechatbot999 | chpasswd && \
-    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
+    echo "export $(cat /proc/1/environ |tr '\0' '\n' | xargs)" >> /etc/profile
 
 RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple dash pandas numpy plotly psycopg2-binary
 
