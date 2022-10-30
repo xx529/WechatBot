@@ -2,25 +2,31 @@
 
 [TOC]
 
-## Message
+## message
 
-表名：message
+表名：room_message
 
 作用：记录微信消息记录
 
-| 字段名      | 数据类型 | 主键 | 默认值 | 描述                       |
-| ----------- | -------- | ---- | ------ | -------------------------- |
-| wechat_id   | varchar  |      |        | 微信号ID                   |
-| wechat_name | varchar  |      |        | 微信号名称                 |
-| room_id     | varchar  |      |        | 消息群名ID，如果为空则为私聊 |
-| timestamp   | int      |      |        | 消息时间戳                 |
-| message     | text     |      |        | 消息内容                   |
+
+
+| 字段名        | 数据类型 | 主键 | 默认值 | 描述                             |
+| ------------- | -------- | ---- | ------ | -------------------------------- |
+| talk_type     | varchar  |      |        | room（群聊）或者 private（私聊） |
+| talker_id     | varchar  |      |        | 发送者微信号ID                   |
+| talker_name   | varchar  |      |        | 发送者微信号名称                 |
+| receiver_id   | varchar  |      |        | 接收者微信号ID                   |
+| receiver_name | varchar  |      |        | 接受者微信名称                   |
+| timestamp     | int      |      |        | 消息时间戳                       |
+| message       | text     |      |        | 消息文本内容                     |
 
 ```sql
 CREATE TABLE public.message (
-	wechat_id varchar NULL,
-	wechat_name varchar NULL,
-	room_id varchar NULL,
+  talk_type varchar NULL,
+	talker_id varchar NULL,
+	talker_name varchar NULL,
+	receiver_id varchar NULL,
+  receiver_name varchar NULL,
 	"timestamp" int NULL,
 	message text NULL
 );
@@ -28,7 +34,7 @@ CREATE TABLE public.message (
 
 
 
-## Room
+## room
 
 表名：room
 

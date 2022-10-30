@@ -29,8 +29,8 @@ services:
       - MESSAGE_SERVICE_ENDPOINT=${MESSAGE_SERVICE_HOST}:${MESSAGE_SERVICE_PORT}
     volumes:
       - "./bot:/bot"
-#    command: python3 /bot/bot.py
-    command: tail -f /dev/null
+    command: python3 /bot/bot.py
+#    command: tail -f /dev/null
     depends_on:
       - gateway
 

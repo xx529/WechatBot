@@ -27,28 +27,32 @@ class MyBot(Wechaty):
         text = msg.text()
         room = msg.room()
 
-        log.info(f'wechat_id: {from_contact.contact_id}')
-        log.info(f'wechat_name: {from_contact.name}')
-        log.info(f'message: {text}')
-        log.info(f"room_id: {room.room_id if room else '私聊'}")
-
-        data = {'wechat_id': from_contact.contact_id,
-                'wechat_name': from_contact.name,
-                'room_id': room.room_id if room else '私聊',
+        data = {'bot_id': self.user_self().contact_id,
+                'bot_name': self.user_self().name,
+                'from_id': from_contact.contact_id,
+                'from_name': from_contact.name,
+                'room_id': room.room_id if room else '',
+                'room_name': room.payload.topic if room else '',
                 'message': text}
 
-        res = requests.post(url=f"{os.environ.get('MESSAGE_SERVICE_ENDPOINT')}/message",
-                            json=json.dumps(data, ensure_ascii=False),
-                            headers={'content-type': 'application/json'})
+        log.info(f"bot: {data['bot_name']} - {data['bot_id']}")
+        log.info(f"from: {data['from_name']} - {data['from_id']}")
+        log.info(f"room: {data['room_name']} - {data['room_id']}")
+        log.info(f"message: {data['message']}")
 
-        log.info('后台请求', res.status_code)
+        if data['from_id'] not in [self.user_self().contact_id, 'weixin']:
+            res = requests.post(url=f"http://{os.environ.get('MESSAGE_SERVICE_ENDPOINT')}/message",
+                                json=json.dumps(data, ensure_ascii=False),
+                                headers={'content-type': 'application/json'})
 
-        command = res.json()
+            log.info(f'后台请求: {res.status_code}')
 
-        if command['action'] == 'answer':
-            conversation = from_contact if room is None else room
-            await conversation.ready()
-            await conversation.say(command['text'])
+        # command = res.json()
+        #
+        # if command['action'] == 'answer':
+        #     conversation = from_contact if room is None else room
+        #     await conversation.ready()
+        #     await conversation.say(command['text'])
 
     # 好友申请
     async def on_friendship(self, friendship: Friendship) -> None:

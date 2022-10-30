@@ -1,6 +1,7 @@
 import os
 import psycopg2
 import logging
+import time
 
 logging.basicConfig(level=logging.INFO)
 
@@ -11,7 +12,7 @@ conn_info = {'dbname': os.environ.get('PG_DB'),
              'port': os.environ.get('PG_PORT')}
 
 
-def auto_exec(func):
+def auto_execute(func):
     def inner(*args, **kwargs):
         with psycopg2.connect(**conn_info) as conn:
             sql = func(*args, **kwargs)
@@ -20,13 +21,26 @@ def auto_exec(func):
     return inner
 
 
-@auto_exec
+@auto_execute
 def add_message(data):
-    logging.info(
-        f"{data['wechat_id']} - {data['wechat_name']} - {data['room_id']} - {data['timestamp']} - {data['message'][:15]}...")
+    timestamp = int(time.time())
+    talk_type = 'private' if data['room_id'] == '' else 'room'
+    receiver_id = data['bot_id'] if data['room_id'] == '' else data['room_id']
+    receiver_name = data['bot_name'] if data['room_id'] == '' else data['room_name']
+
+    logging.info(f"from bot: {data['bot_name']} - {data['bot_id']}")
+    logging.info(f"from talker: {data['from_name']} - {data['from_id']}")
+    logging.info(f"from room: {data['room_name']} - {data['room_id']}")
+    logging.info(f"message: {data['message'][:100]}...")
 
     sql = f"""insert into message 
-              (wechat_id, wechat_name, room_id, timestamp, message)
-              values ('{data['wechat_id']}', '{data['wechat_name']}', '{data['room_id']}', {data['timestamp']}, '{data['message']}')
+              (talk_type, talker_id, talker_name, receiver_id, receiver_name, timestamp, message)
+              values ('{talk_type}', 
+                      '{data['from_id']}', 
+                      '{data['from_name']}', 
+                      '{receiver_id}', 
+                      '{receiver_name}', 
+                      {timestamp}, '
+                      {data['message']}')
                """
     return sql
