@@ -17,7 +17,7 @@
 | talker_name   | varchar  |      |        | 发送者微信号名称                 |
 | receiver_id   | varchar  |      |        | 接收者微信号ID                   |
 | receiver_name | varchar  |      |        | 接受者微信名称                   |
-| timestamp     | int      |      |        | 消息时间戳                       |
+| timestamp     | float    |      |        | 消息时间戳                       |
 | message       | text     |      |        | 消息文本内容                     |
 
 ```sql
@@ -27,7 +27,7 @@ CREATE TABLE public.message (
 	talker_name varchar NULL,
 	receiver_id varchar NULL,
   receiver_name varchar NULL,
-	"timestamp" int NULL,
+	"timestamp" float NULL,
 	message text NULL
 );
 ```

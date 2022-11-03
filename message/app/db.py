@@ -23,7 +23,7 @@ def auto_execute(func):
 
 @auto_execute
 def add_message(data):
-    timestamp = int(time.time())
+    timestamp = time.time()
     talk_type = 'private' if data['room_id'] == '' else 'room'
     receiver_id = data['bot_id'] if data['room_id'] == '' else data['room_id']
     receiver_name = data['bot_name'] if data['room_id'] == '' else data['room_name']

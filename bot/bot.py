@@ -7,6 +7,8 @@ from typing import Optional, List
 from wechaty import Wechaty, Contact, Friendship, Room
 from wechaty.user import Message
 import datetime
+import random
+import time
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -47,12 +49,20 @@ class MyBot(Wechaty):
 
             log.info(f'后台请求: {res.status_code}')
 
-        # command = res.json()
-        #
-        # if command['action'] == 'answer':
-        #     conversation = from_contact if room is None else room
-        #     await conversation.ready()
-        #     await conversation.say(command['text'])
+            command = res.json()
+
+            if command['action'] == 'answer':
+
+                sleep_time = random.randint(1, 10)
+                log.info(f"回复: {command['text']} (等待{sleep_time}s)")
+                time.sleep(sleep_time)
+
+                conversation = from_contact if room is None else room
+                await conversation.ready()
+                await conversation.say(command['text'])
+
+            else:
+                log.info('回复：无')
 
     # 好友申请
     async def on_friendship(self, friendship: Friendship) -> None:
@@ -77,7 +87,7 @@ class MyBot(Wechaty):
         inviter_wechat_name = inviter.name
         invitees_ls = [{'wechat_id': c.contact_id, 'wechat_name': c.name} for c in invitees]
 
-        log.info(f"'room_id': {room_id}")
+        log.info(f'room_id: {room_id}')
         log.info(f'room_size: {room_size}')
         log.info(f'inviter: {inviter_wechat_id} - {inviter_wechat_name}')
         log.info(f"invitees_ls: {[(i['wechat_id'], i['wechat_name']) for i in invitees_ls]}")

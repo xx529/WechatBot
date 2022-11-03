@@ -1,11 +1,11 @@
-import logging
-
 from flask import Flask, request
 import json
-import random
 from db import add_message
+from faker import Faker
+
 
 app = Flask(__name__)
+f = Faker('zh_CN')
 
 
 @app.route('/message', methods=['POST'])
@@ -17,20 +17,31 @@ def message():
 
     text = data['message']
 
-    if '新闻' in text:
+    if '今日头条' in text and '@AI小黑狗' in text and data['room_id'] in ['48978056256@chatroom', '19561654518@chatroom']:
         res['action'] = 'answer'
-        res['text'] = random.choice(['非常好', '我都觉得系感样', '边有可能', '我五信！'])
-
-    elif '好的' in text:
+        res['text'] = f.text().replace('\n', '')
+    elif '拍了拍我' in text and data['room_id'] in ['48978056256@chatroom']:
         res['action'] = 'answer'
-        res['text'] = 'Ok的！'
-
+        res['text'] = '别拍了，疼（含羞脸）[翻白眼]'
     else:
-        if random.random() > 0.7:
-            res['action'] = 'answer'
-            res['text'] = random.choice(['知道了', '收到', '明白', 'Ok'])
+        pass
+
+    if res['action'] == 'answer':
+        add_message({'bot_id': data['bot_id'],
+                     'bot_name': data['bot_name'],
+                     'from_id': data['bot_id'],
+                     'from_name': data['bot_name'],
+                     'room_id': data['room_id'],
+                     'room_name': data['room_name'],
+                     'message': res['text']})
 
     return res
+
+
+@app.route('/room_join', methods=['POST'])
+def room_join():
+    data = json.loads(request.json)
+    return data
 
 
 if __name__ == '__main__':
