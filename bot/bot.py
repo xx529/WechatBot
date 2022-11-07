@@ -6,12 +6,45 @@ import os
 from typing import Optional, List
 from wechaty import Wechaty, Contact, Friendship, Room
 from wechaty.user import Message
+from wechaty.plugin import WechatyPlugin
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import datetime
 import random
 import time
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
+
+
+class DailyPushPlugin(WechatyPlugin):
+
+    @property
+    def name(self) -> str:
+        return 'daily task'
+
+    async def task(self):
+        res = requests.get(f"http://{os.environ.get('MESSAGE_SERVICE_ENDPOINT')}/daily_push")
+        log.info(f'定时推送请求: {res.status_code}')
+
+        log.info(res.json())
+        task_info = res.json()
+
+        if 'action' in task_info and task_info['action'] == 'push':
+            delay = random.randint(1, 60) * 60
+            log.info(f'延迟推送：{delay}s')
+            time.sleep(delay)
+
+            rooms = await self.bot.Room.find_all()
+            for room in rooms:
+                if room.room_id in task_info['room_ids']:
+                    await room.say(task_info['message'])
+                    time.sleep(random.randint(1, 10))
+
+    async def init_plugin(self, wechaty: Wechaty):
+        await super().init_plugin(wechaty)
+        scheduler = AsyncIOScheduler()
+        scheduler.add_job(self.task, 'interval', seconds=10)
+        # scheduler.add_job(func=self.task, trigger='cron', hour=8, minute=0, second=0)
 
 
 class MyBot(Wechaty):
@@ -47,7 +80,7 @@ class MyBot(Wechaty):
                                 json=json.dumps(data, ensure_ascii=False),
                                 headers={'content-type': 'application/json'})
 
-            log.info(f'后台请求: {res.status_code}')
+            log.info(f'消息服务请求: {res.status_code}')
 
             command = res.json()
 
@@ -113,7 +146,7 @@ bot: Optional[MyBot] = None
 async def main():
     """doc"""
     global bot
-    bot = MyBot()
+    bot = MyBot().use(DailyPushPlugin())
     await bot.start()
 
 
