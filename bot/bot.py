@@ -1,7 +1,6 @@
 import asyncio
 import logging
 import requests
-import json
 import os
 from typing import Optional, List
 from wechaty import Wechaty, Contact, Friendship, Room
@@ -20,31 +19,50 @@ class DailyPushPlugin(WechatyPlugin):
 
     @property
     def name(self) -> str:
-        return 'daily task'
+        return 'daily_task'
 
-    async def task(self):
-        res = requests.get(f"http://{os.environ.get('MESSAGE_SERVICE_ENDPOINT')}/daily_push")
-        log.info(f'定时推送请求: {res.status_code}')
+    async def task1(self):
+        res = requests.post(url=f"http://{os.environ.get('MESSAGE_SERVICE_ENDPOINT')}/daily_push",
+                            json={'task_name': 'study'},
+                            headers={'content-type': 'application/json'})
+
+        log.info(f'study 定时推送请求: {res.status_code}')
 
         log.info(res.json())
         task_info = res.json()
 
         if 'action' in task_info and task_info['action'] == 'push':
-            delay = random.randint(1, 60) * 60
-            log.info(f'延迟推送：{delay}s')
-            time.sleep(delay)
 
             rooms = await self.bot.Room.find_all()
             for room in rooms:
                 if room.room_id in task_info['room_ids']:
+                    time.sleep(random.randint(20, 60))
                     await room.say(task_info['message'])
-                    time.sleep(random.randint(1, 10))
+
+    async def task2(self):
+        res = requests.post(url=f"http://{os.environ.get('MESSAGE_SERVICE_ENDPOINT')}/daily_push",
+                            json={'task_name': 'greeting'},
+                            headers={'content-type': 'application/json'})
+
+        log.info(f'greeting 定时推送请求: {res.status_code}')
+
+        log.info(res.json())
+        task_info = res.json()
+
+        if 'action' in task_info and task_info['action'] == 'push':
+
+            rooms = await self.bot.Room.find_all()
+            for room in rooms:
+                if room.room_id in task_info['room_ids']:
+                    time.sleep(random.randint(20, 60))
+                    await room.say(task_info['message'])
 
     async def init_plugin(self, wechaty: Wechaty):
         await super().init_plugin(wechaty)
         scheduler = AsyncIOScheduler()
-        scheduler.add_job(self.task, 'interval', seconds=10)
-        # scheduler.add_job(func=self.task, trigger='cron', hour=8, minute=0, second=0)
+        scheduler.add_job(func=self.task1, trigger='cron', hour=8, minute=30, second=1)
+        scheduler.add_job(func=self.task2, trigger='cron', hour=18, minute=50, second=3)
+        scheduler.start()
 
 
 class MyBot(Wechaty):
@@ -77,7 +95,7 @@ class MyBot(Wechaty):
 
         if data['from_id'] not in [self.user_self().contact_id, 'weixin']:
             res = requests.post(url=f"http://{os.environ.get('MESSAGE_SERVICE_ENDPOINT')}/message",
-                                json=json.dumps(data, ensure_ascii=False),
+                                json=data,
                                 headers={'content-type': 'application/json'})
 
             log.info(f'消息服务请求: {res.status_code}')
