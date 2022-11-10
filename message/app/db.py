@@ -40,7 +40,7 @@ def add_message(data):
                       '{data['from_name']}', 
                       '{receiver_id}', 
                       '{receiver_name}', 
-                      {timestamp}, '
-                      {data['message']}')
+                      {timestamp}, 
+                      '{data['message']}')
                """
     return sql

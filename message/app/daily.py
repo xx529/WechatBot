@@ -1,24 +1,16 @@
 import datetime
-
-STUDY_TASK = {'2022-11-10': {'room_ids': ['48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom'],
-                             'message': '上班好塞车啊（这个是每日资料推送）'}}
-
-GREETING_TASK = {'2022-11-10': {'room_ids': ['48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom'],
-                                'message': '收工啦！收工啦！（这个是每日讨论或者问候）'}}
-
-TASK = {'study': STUDY_TASK,
-        'greeting': GREETING_TASK}
-
-DEFAULT = {'action': 'pass'}
+import yaml
 
 
-def get_daily_task(data):
-    task_name = data['task_name']
+def get_daily_task(task_name):
 
-    if task_name not in TASK:
-        return DEFAULT
+    with open('/message/app/tasklist.yaml') as f:
+        task_list = yaml.load(f, Loader=yaml.FullLoader)
 
-    cur_task = TASK[task_name]
+    if task_name not in task_list:
+        return {'action': 'pass'}
+
+    cur_task = task_list[task_name]
     today = str(datetime.datetime.now()).split()[0]
 
     if today in cur_task:
@@ -26,4 +18,4 @@ def get_daily_task(data):
         task_info['action'] = 'push'
         return task_info
     else:
-        return DEFAULT
+        return {'action': 'pass'}

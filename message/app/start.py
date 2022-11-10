@@ -2,7 +2,6 @@ from flask import Flask, request
 from db import add_message
 from daily import get_daily_task
 from faker import Faker
-import logging
 
 app = Flask(__name__)
 f = Faker('zh_CN')
@@ -46,8 +45,7 @@ def room_join():
 
 @app.route('/daily_push', methods=['POST'])
 def daily_task():
-    task_info = get_daily_task(request.json)
-    return task_info
+    return get_daily_task(request.json['task_name'])
 
 
 if __name__ == '__main__':
