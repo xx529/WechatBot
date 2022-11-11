@@ -64,3 +64,25 @@ CREATE TABLE public.room (
 );
 ```
 
+
+
+## hot words
+
+表名：hot_words
+
+作用：记录每个群的词频热词统计
+
+| 字段名  | 数据类型 | 主键 | 默认值 | 描述       |
+| ------- | -------- | ---- | ------ | ---------- |
+| room_id | varchar  |      |        | 消息群名ID |
+| word    | varchar  |      |        | 单词       |
+| count   | int      |      |        | 单词词频数 |
+
+```sql
+CREATE TABLE public.hot_words (
+	room_id varchar NULL,
+	word varchar NULL,
+	"count" int NULL
+);
+```
+
