@@ -1,10 +1,10 @@
 study:
   "2022-11-11":
     room_ids: [ '48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom' ]
-    'message': '周五，做埋今日可以放假！'
+    message: '周五，做埋今日可以放假！'
   "2022-11-12":
     room_ids: [ '48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom' ]
-    'message': '又要开OT！'
+    message: '又要开OT！'
   "2022-11-13":
     room_ids: [ '48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom' ]
     'message': 'Zzz...'
@@ -12,10 +12,10 @@ study:
 greeting:
   "2022-11-11":
     room_ids: [ '48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom' ]
-    'message': '今日广州封了好多个区，贼惨！'
+    message: '今日广州封了好多个区，贼惨！'
   "2022-11-12":
     room_ids: [ '48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom' ]
-    'message': '继续开OT！'
+    message: '继续开OT！！！'
   "2022-11-13":
     room_ids: [ '48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom' ]
-    'message': '今日打烊！'
+    message: '今日打烊！'

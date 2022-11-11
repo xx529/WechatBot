@@ -1,5 +1,5 @@
 from flask import Flask, request
-from db import add_message
+from db import add_receive_message, add_send_message
 from daily import get_daily_task
 from answer import get_answer
 
@@ -9,17 +9,11 @@ app = Flask(__name__)
 @app.route('/message', methods=['POST'])
 def message():
     data = request.json
-    add_message(data)
+    add_receive_message(data)
     res = get_answer(data)
 
     if res['action'] == 'answer':
-        add_message({'bot_id': data['bot_id'],
-                     'bot_name': data['bot_name'],
-                     'from_id': data['bot_id'],
-                     'from_name': data['bot_name'],
-                     'room_id': data['room_id'],
-                     'room_name': data['room_name'],
-                     'message': res['text']})
+        add_send_message(data, res['text'])
 
     return res
 
