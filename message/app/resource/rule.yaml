@@ -1,0 +1,39 @@
+matching_rules:
+
+  # 回复 @bot 今日头条
+  - rule:
+      match_rooms:
+        - '48978056256@chatroom'
+        - '19561654518@chatroom'
+        - '39167613285@chatroom'
+      match_both_words:
+        - '今日头条'
+        - '@AI小黑狗'
+    answer:
+      type: 'code'
+      value: 'Faker("zh_CN").text().replace("\n", "")'
+
+  # 回复 拍一拍我
+  - rule:
+      match_rooms:
+          - '48978056256@chatroom'
+          - '19561654518@chatroom'
+          - '39167613285@chatroom'
+      match_both_words:
+      - '拍了拍我'
+    answer:
+      type: 'text'
+      value: '随便你拍，无所谓！'
+
+  # 回复 test rule
+  - rule:
+      match_rooms:
+        - '48978056256@chatroom'
+        - '19561654518@chatroom'
+        - '39167613285@chatroom'
+      match_both_words:
+        - 'test rule'
+        - '@AI小黑狗'
+    answer:
+      type: 'code'
+      value: 'f"今日幸运号码：{random.random()}"'

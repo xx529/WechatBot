@@ -33,8 +33,9 @@ def add_message(data):
     logging.info(f"from room: {data['room_name']} - {data['room_id']}")
     logging.info(f"message: {data['message'][:100]}...")
 
-    sql = f"""insert into message 
-              (talk_type, talker_id, talker_name, receiver_id, receiver_name, timestamp, message)
+    sql = f"""
+              insert into 
+              message (talk_type, talker_id, talker_name, receiver_id, receiver_name, timestamp, message)
               values ('{talk_type}', 
                       '{data['from_id']}', 
                       '{data['from_name']}', 

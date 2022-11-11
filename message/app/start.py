@@ -1,29 +1,16 @@
 from flask import Flask, request
 from db import add_message
 from daily import get_daily_task
-from faker import Faker
+from answer import get_answer
 
 app = Flask(__name__)
-f = Faker('zh_CN')
 
 
 @app.route('/message', methods=['POST'])
 def message():
     data = request.json
     add_message(data)
-
-    res = {'action': 'nothing'}
-
-    text = data['message']
-
-    if '今日头条' in text and '@AI小黑狗' in text and data['room_id'] in ['48978056256@chatroom', '19561654518@chatroom', '39167613285@chatroom']:
-        res['action'] = 'answer'
-        res['text'] = f.text().replace('\n', '')
-    elif '拍了拍我' in text and data['room_id'] in ['48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom']:
-        res['action'] = 'answer'
-        res['text'] = '别拍了，疼[翻白眼]'
-    else:
-        pass
+    res = get_answer(data)
 
     if res['action'] == 'answer':
         add_message({'bot_id': data['bot_id'],

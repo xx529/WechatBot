@@ -30,7 +30,6 @@ services:
     volumes:
       - "./bot:/bot"
     command: python3 /bot/bot.py
-#    command: tail -f /dev/null
     depends_on:
       - gateway
 
@@ -89,6 +88,6 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - TZ=${TZ}
     ports:
-      - "132:5432"
+      - "${PG_PORT}:5432"
     volumes:
       - "./postgres/data:/var/lib/postgresql/data"
