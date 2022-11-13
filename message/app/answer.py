@@ -5,6 +5,9 @@ import yaml
 answer_type_to_func = {'text': lambda x: x,
                        'code': lambda x: str(eval(x))}
 
+type_to_id = {'room': ['room_id', 'match_rooms'],
+              'private': ['from_id', 'match_privates']}
+
 
 def get_answer(data):
 
@@ -17,8 +20,9 @@ def get_answer(data):
     # 循环每一个规则
     for rule_info in match_rule:
         rule = rule_info['rule']
+        id_name, match_name = type_to_id[rule['type']]
 
-        if data['room_id'] not in rule['match_rooms']:
+        if data[id_name] not in rule[match_name]:
             continue
 
         if not all(map(lambda x: x in data['message'], rule['match_both_words'])):

@@ -2,6 +2,7 @@ matching_rules:
 
   # 回复 @bot 今日头条
   - rule:
+      type: 'room'
       match_rooms:
         - '48978056256@chatroom'
         - '19561654518@chatroom'
@@ -15,6 +16,7 @@ matching_rules:
 
   # 回复 拍一拍我
   - rule:
+      type: 'room'
       match_rooms:
           - '48978056256@chatroom'
           - '19561654518@chatroom'
@@ -27,6 +29,7 @@ matching_rules:
 
   # 回复 test rule
   - rule:
+      type: 'room'
       match_rooms:
         - '48978056256@chatroom'
         - '19561654518@chatroom'
@@ -37,3 +40,14 @@ matching_rules:
     answer:
       type: 'code'
       value: 'f"今日幸运号码：{random.random()}"'
+
+  # 回复管理员
+  - rule:
+      type: 'private'
+      match_privates:
+        - 'xx964905'
+      match_both_words:
+        - '今日咩情况'
+    answer:
+      type: 'code'
+      value: 'random.choice(["今日还好啦", "你吃做饭未", "唔得闲啊宜家"])'
