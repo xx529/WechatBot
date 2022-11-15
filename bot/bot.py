@@ -132,30 +132,52 @@ class MyBot(Wechaty):
     # 人员进群信息监听
     async def on_room_join(self, room: Room, invitees: List[Contact], inviter: Contact, date: datetime) -> None:
 
-        room_size = await room.member_list()
-        room_id = Room.room_id
-        inviter_wechat_id = inviter.contact_id
-        inviter_wechat_name = inviter.name
-        invitees_ls = [{'wechat_id': c.contact_id, 'wechat_name': c.name} for c in invitees]
+        room_members = await room.member_list()
 
-        log.info(f'room_id: {room_id}')
-        log.info(f'room_size: {room_size}')
-        log.info(f'inviter: {inviter_wechat_id} - {inviter_wechat_name}')
-        log.info(f"invitees_ls: {[(i['wechat_id'], i['wechat_name']) for i in invitees_ls]}")
+        data = {'room_id': room.room_id,
+                'room_name': room.payload.topic,
+                'room_size': len(room_members),
+                'inviter_id': inviter.contact_id,
+                'inviter_name': inviter.name,
+                'invitees_ls': [{'wechat_id': c.contact_id, 'wechat_name': c.name} for c in invitees]}
+
+        log.info(f"room_id: {data['room_id']}")
+        log.info(f"room_name: {data['room_name']}")
+        log.info(f"room_size: {data['room_size']}")
+        log.info(f"inviter_id: {data['inviter_id']}")
+        log.info(f"inviter_name: {data['inviter_name']}")
+        log.info(f"invitees_ls: {data['invitees_ls']}")
+
+        res = requests.post(url=f"http://{os.environ.get('MESSAGE_SERVICE_ENDPOINT')}/room_join",
+                            json=data,
+                            headers={'content-type': 'application/json'})
+
+        log.info(f'群人员进入统计: {res.status_code}')
 
     # 人员退群信息监听
     async def on_room_leave(self, room: Room, leavers: List[Contact], remover: Contact, date: datetime) -> None:
 
-        room_size = await room.member_list()
-        room_id = Room.room_id
-        remover_wechat_id = remover.contact_id
-        remover_wechat_name = remover.name
-        leavers_ls = [{'wechat_id': c.contact_id, 'wechat_name': c.name} for c in leavers]
+        room_members = await room.member_list()
 
-        log.info(f"'room_id': {room_id}")
-        log.info(f'room_size: {room_size}')
-        log.info(f'remover: {remover_wechat_id} - {remover_wechat_name}')
-        log.info(f"leavers_ls: {[(i['wechat_id'], i['wechat_name']) for i in leavers_ls]}")
+        data = {'room_id': room.room_id,
+                'room_name': room.payload.topic,
+                'room_size': len(room_members),
+                'remover_id': remover.contact_id,
+                'remover_name': remover.name,
+                'leavers_ls': [{'wechat_id': c.contact_id, 'wechat_name': c.name} for c in leavers]}
+
+        log.info(f"room_id: {data['room_id']}")
+        log.info(f"room_name: {data['room_name']}")
+        log.info(f"room_size: {data['room_size']}")
+        log.info(f"remover_id: {data['remover_id']}")
+        log.info(f"remover_name: {data['remover_name']}")
+        log.info(f"leavers_ls: {data['leavers_ls']}")
+
+        res = requests.post(url=f"http://{os.environ.get('MESSAGE_SERVICE_ENDPOINT')}/room_leave",
+                            json=data,
+                            headers={'content-type': 'application/json'})
+
+        log.info(f'群人员离开统计: {res.status_code}')
 
 
 bot: Optional[MyBot] = None

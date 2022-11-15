@@ -1,5 +1,5 @@
 from flask import Flask, request
-from db import add_receive_message, add_send_message
+from db import add_receive_message, add_send_message, room_join_record, room_leave_record
 from daily import get_daily_task
 from answer import get_answer
 
@@ -21,6 +21,14 @@ def message():
 @app.route('/room_join', methods=['POST'])
 def room_join():
     data = request.json
+    room_join_record(data)
+    return data
+
+
+@app.route('/room_leave', methods=['POST'])
+def room_leave():
+    data = request.json
+    room_leave_record(data)
     return data
 
 

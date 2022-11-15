@@ -17,6 +17,11 @@ MESSAGE_SQL = """
     values ('{talk_type}', '{talker_id}', '{talker_name}', '{receiver_id}', '{receiver_name}', {timestamp}, '{message}')
     """
 
+ROOM_SQL = """
+    insert into 
+    room (room_id, room_name, current_size, wechat_id, wechat_name, in_out, operate_wechat_id, operate_wechat_name, timestamp)
+    values ('{room_id}', '{room_name}', {current_size}, '{wechat_id}', '{wechat_name}', {in_out}, '{operate_wechat_id}', '{operate_wechat_name}', {timestamp})"""
+
 
 def auto_execute(func):
     def inner(*args, **kwargs):
@@ -57,3 +62,41 @@ def add_send_message(data, answer_text):
 
     return info
 
+
+def room_join_record(data):
+    info = {'timestamp': time.time(),
+            'in_out': 1,
+            'room_id': data['room_id'],
+            'room_name': data['room_name'],
+            'operate_wechat_id': data['inviter_id'],
+            'operate_wechat_name': data['inviter_name']}
+
+    num_ls = [data['room_size'] - x + 1 for x in list(range(len(data['invitees_ls']), 0, -1))]
+
+    with psycopg2.connect(**CONN) as conn:
+        for idx, (num, invite) in enumerate(zip(num_ls, data['invitees_ls'])):
+            info['current_size'] = num
+            info['wechat_id'] = data['invitees_ls'][idx]['wechat_id']
+            info['wechat_name'] = data['invitees_ls'][idx]['wechat_name']
+
+            conn.cursor().execute(ROOM_SQL.format(**info))
+
+
+def room_leave_record(data):
+
+    info = {'timestamp': time.time(),
+            'in_out': -1,
+            'room_id': data['room_id'],
+            'room_name': data['room_name'],
+            'operate_wechat_id': data['remover_id'],
+            'operate_wechat_name': data['remover_name']}
+
+    num_ls = [data['room_size'] - x for x in list(range(len(data['leavers_ls'])))]
+
+    with psycopg2.connect(**CONN) as conn:
+        for idx, (num, invite) in enumerate(zip(num_ls, data['leavers_ls'])):
+            info['current_size'] = num
+            info['wechat_id'] = data['leavers_ls'][idx]['wechat_id']
+            info['wechat_name'] = data['leavers_ls'][idx]['wechat_name']
+
+            conn.cursor().execute(ROOM_SQL.format(**info))

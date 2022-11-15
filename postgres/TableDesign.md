@@ -41,6 +41,7 @@ CREATE TABLE public.message (
 | 字段名              | 数据类型 | 主键 | 默认值 | 描述                         |
 | ------------------- | -------- | ---- | ------ | ---------------------------- |
 | room_id             | varchar  |      |        | 消息群名ID                   |
+| room_name           | varchar  |      |        | 消息群名                     |
 | current_size        | int      |      |        | 当前群总人数                 |
 | wechat_id           | varchar  |      |        | 微信号ID                     |
 | wechat_name         | varchar  |      |        | 微信号名称                   |
@@ -52,13 +53,14 @@ CREATE TABLE public.message (
 ```sql
 CREATE TABLE public.room (
 	room_id varchar NULL,
+  room_name varchar NULL,
 	current_size int NULL,
 	wechat_id varchar NULL,
 	wechat_name varchar NULL,
 	in_out int NULL,
 	operate_wechat_id varchar NULL,
 	operate_wechat_name varchar NULL,
-	"timestamp" int NULL
+	"timestamp" float NULL
 );
 ```
 
