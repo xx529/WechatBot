@@ -1,16 +1,16 @@
 import datetime
 import yaml
 
-PASS_ACTION = {'action': 'pass'}
-
 
 def get_daily_task(task_name):
 
-    with open('/message/app/resource/tasklist.yaml') as f:
+    pass_action = {'action': 'pass'}
+
+    with open('/message/app/resource/daily_task_list.yaml') as f:
         task_list = yaml.load(f, Loader=yaml.FullLoader)
 
     if task_name not in task_list:
-        return PASS_ACTION
+        return pass_action
 
     cur_task = task_list[task_name]
     today = str(datetime.datetime.now()).split()[0]
@@ -20,4 +20,4 @@ def get_daily_task(task_name):
         task_info['action'] = 'push'
         return task_info
     else:
-        return PASS_ACTION
+        return pass_action

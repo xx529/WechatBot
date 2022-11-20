@@ -1,0 +1,60 @@
+- priority: 0
+  match_rooms:
+    - '48978056256@chatroom'
+    - '19561654518@chatroom'
+    - '39167613285@chatroom'
+  match_both_words:
+    - '今日头条'
+    - '@AI小黑狗'
+  answer:
+    key: 'code'
+    value: 'Faker("zh_CN").text().replace("\n", "")'
+
+- priority: 1
+  match_rooms:
+    - '48978056256@chatroom'
+    - '19561654518@chatroom'
+    - '39167613285@chatroom'
+  match_both_words:
+    - '拍了拍我'
+  answer:
+    key: 'text'
+    value: '随便你拍，无所谓！'
+
+- priority: 2
+  match_both_words:
+    - 'test rule'
+  answer:
+    key: 'code'
+    value: 'f"今日幸运号码：{random.random()}"'
+
+- priority: 0
+  match_privates:
+    - 'xx964905'
+  match_both_words:
+    - '今日咩情况'
+  answer:
+    key: 'code'
+    value: 'random.choice(["今日还好啦", "你吃做饭未", "唔得闲啊宜家"])'
+
+- priority: 1
+  match_rooms:
+    - '48978056256@chatroom'
+  match_privates:
+    - 'xx964905'
+  match_both_words:
+    - '今日核酸做了未'
+  answer:
+    key: 'code'
+    value: 'random.choice(["忘记了，草！", "排了一个小时队啊！", "还没呢！"])'
+
+- priority: 2
+  match_rooms:
+    - '39167613285@chatroom'
+  match_privates:
+    - 'wxid_92nx827yfzz922'
+  match_both_words:
+    - '今日核酸做了未'
+  answer:
+    key: 'code'
+    value: 'random.choice(["忘记了，草！", "排了一个小时队啊！", "还没呢！"])'

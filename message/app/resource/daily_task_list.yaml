@@ -1,0 +1,9 @@
+study:
+  "2022-11-21":
+    room_ids: [ '48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom' ]
+    message: '愉快的周一又开始了！'
+
+greeting:
+  "2022-11-21":
+    room_ids: [ '48978056256@chatroom', '39167613285@chatroom', '19561654518@chatroom' ]
+    message: '临时需求又来了'
