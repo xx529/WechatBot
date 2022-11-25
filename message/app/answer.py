@@ -6,11 +6,7 @@ import yaml
 def get_answer(data):
 
     # 读取规则表
-    with open('/message/app/resource/answer_rule.yaml') as f:
-        rule_list = yaml.load(f, Loader=yaml.FullLoader)
-
-    # 优先级排序
-    rule_list = sorted(rule_list, key=lambda x: x['priority'])
+    rule_list = _get_task_list()
 
     # 循环每一个规则
     for rule in rule_list:
@@ -43,3 +39,10 @@ def _get_answer_text(key, value):
     type_to_func = {'text': lambda x: x,
                     'code': lambda x: str(eval(x))}
     return type_to_func[key](value)
+
+
+def _get_task_list():
+    with open('/message/app/resource/answer_rule.yaml') as f:
+        rule_list = yaml.load(f, Loader=yaml.FullLoader)
+    rule_list = sorted(rule_list, key=lambda x: x['priority'])
+    return rule_list

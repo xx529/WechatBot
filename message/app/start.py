@@ -20,22 +20,19 @@ def message():
 
 @app.route('/room_join', methods=['POST'])
 def room_join():
-    data = request.json
-    room_join_record(data)
+    room_join_record(request.json)
     return {'state': 'success'}
 
 
 @app.route('/room_leave', methods=['POST'])
 def room_leave():
-    data = request.json
-    room_leave_record(data)
+    room_leave_record(request.json)
     return {'state': 'success'}
 
 
 @app.route('/daily_push', methods=['POST'])
 def daily_task():
-    task_name = request.json['task_name']
-    return get_daily_task(task_name)
+    return get_daily_task(request.json['task_name'])
 
 
 if __name__ == '__main__':
